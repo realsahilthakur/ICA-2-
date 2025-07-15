@@ -1,10 +1,14 @@
 function updateTime() {
-  var dt = new Date();
-  document.getElementById("datetime").innerHTML = dt.toLocaleString();
+  const element = document.getElementById("datetime");
+  if (element) {
+    element.innerHTML = new Date().toLocaleString();
+  }
 }
 
-// Update time immediately and then every second
-updateTime();
-setInterval(updateTime, 1000);
+// Only run in browser environment, not during tests
+if (typeof jest === 'undefined') {
+  updateTime();
+  setInterval(updateTime, 1000);
+}
 
 module.exports = { updateTime };
