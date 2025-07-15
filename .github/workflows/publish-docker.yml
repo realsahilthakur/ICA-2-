@@ -1,0 +1,22 @@
+name: Publish Docker Image
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Log in to GitHub Packages
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t ghcr.io/realsahilthakur/realsahilthakur-ica-2-/todo-backend:latest .
+          docker push ghcr.io/realsahilthakur/realsahilthakur-ica-2-/todo-backend:latest
+        working-directory: ./Backend
