@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.33.0",
-    "@clerk/clerk-sdk-node": "^5.1.6",
+    "@clerk/clerk-sdk-node": "^4.13.23",
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
     "express": "^4.21.2",
@@ -16,9 +16,9 @@
     "mongoose": "^7.8.7"
   },
   "devDependencies": {
-    "chai": "^4.3.7",
     "mocha": "^10.2.0",
-    "mocha-junit-reporter": "^2.2.1",
-    "supertest": "^6.3.3"
+    "chai": "^4.3.7",
+    "supertest": "^6.3.3",
+    "mocha-junit-reporter": "^2.2.1"
   }
 }
