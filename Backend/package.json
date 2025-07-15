@@ -4,7 +4,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "mocha --reporter mocha-junit-reporter --reporter-options mochaFile=test-results.xml"
+    "test": "mocha tests/server.test.js --reporter mocha-junit-reporter --reporter-options mochaFile=test-results.xml"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.33.0",
