@@ -19,6 +19,7 @@
     "mocha": "^10.2.0",
     "chai": "^4.3.7",
     "supertest": "^6.3.3",
-    "mocha-junit-reporter": "^2.2.1"
+    "mocha-junit-reporter": "^2.2.1",
+    "mongodb-memory-server": "^9.1.7"
   }
 }
