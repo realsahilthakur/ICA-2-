@@ -8,6 +8,7 @@ let server;
 let mongoServer;
 
 before(async () => {
+  console.log('Starting MongoMemoryServer and Mongoose connection...');
   mongoServer = await MongoMemoryServer.create();
   process.env.TEST_MONGO_URI = mongoServer.getUri();
   await mongoose.connect(process.env.TEST_MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -15,19 +16,23 @@ before(async () => {
 });
 
 after(async () => {
-  await server.close(); // Close the server
+  console.log('Cleaning up...');
+  await server.close(() => console.log('Server closed'));
   await mongoose.connection.close();
   await mongoServer.stop();
+  process.exit(0); // Force exit to ensure cleanup
 });
 
 describe('Todo API', () => {
   it('should return a list of todos', async () => {
+    console.log('Running test: should return a list of todos');
     const res = await request(server).get('/api/todos');
     expect(res.status).to.equal(200);
     expect(res.body).to.be.an('array');
   });
 
   it('should create a todo', async () => {
+    console.log('Running test: should create a todo');
     const res = await request(server)
       .post('/api/todos')
       .send({ text: 'Test Todo' });
