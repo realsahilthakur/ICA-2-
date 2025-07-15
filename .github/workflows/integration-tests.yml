@@ -1,0 +1,35 @@
+name: Integration Tests with Service Container
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+      backend:
+        image: ghcr.io/realsahilthakur/realsahilthakur-ica-2-/todo-backend:latest
+        env:
+          MONGO_URI: mongodb://mongodb:27017/todo
+        ports:
+          - 3000:3000
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Backend Test Dependencies
+        run: npm install
+        working-directory: ./Backend
+      - name: Run Integration Tests
+        run: npm test
+        working-directory: ./Backend
+        env:
+          MONGO_URI: mongodb://localhost:27017/todo
