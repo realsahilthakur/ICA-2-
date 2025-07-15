@@ -1,4 +1,4 @@
-const { updateTime } = require('../time.js');
+const { updateTime } = require('../time');
 
 describe('Time Functions', () => {
   beforeEach(() => {
