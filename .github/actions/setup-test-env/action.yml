@@ -1,1 +1,17 @@
-
+name: 'Setup Test Environment'
+description: 'Installs Node.js and dependencies for testing'
+inputs:
+  working-directory:
+    description: 'Directory to run commands in'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - name: Install Dependencies
+      run: npm install
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
