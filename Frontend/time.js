@@ -5,10 +5,11 @@ function updateTime() {
   }
 }
 
-// Only run in browser environment, not during tests
+// Export without immediate execution
+module.exports = { updateTime };
+
+// Initialize only in browser environment
 if (typeof jest === 'undefined') {
   updateTime();
   setInterval(updateTime, 1000);
 }
-
-module.exports = { updateTime };
