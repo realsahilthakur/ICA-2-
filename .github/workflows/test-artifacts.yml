@@ -1,14 +1,12 @@
-name: Run Tests and Store Artifacts
+name: Run Tests on Self-Hosted Runners
 
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  test-windows:
+    runs-on: [self-hosted, windows-runner]
     steps:
       - uses: actions/checkout@v4
       - name: Set up Node.js
@@ -29,10 +27,25 @@ jobs:
         working-directory: ./Backend
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
-      - name: Archive Test Reports
-        uses: actions/upload-artifact@v4
+  test-linux:
+    runs-on: [self-hosted, linux-runner]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          name: test-reports
-          path: |
-            Frontend/jest-results.json
-            Backend/test-results.xml
+          node-version: '20'
+      - name: Install Frontend Dependencies
+        run: npm install
+        working-directory: ./Frontend
+      - name: Run Frontend Tests
+        run: npm test
+        working-directory: ./Frontend
+      - name: Install Backend Dependencies
+        run: npm install
+        working-directory: ./Backend
+      - name: Run Backend Tests
+        run: npm test
+        working-directory: ./Backend
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
