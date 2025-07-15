@@ -1,52 +1,37 @@
-name: Run Tests on Self-Hosted Runners
+name: Run Tests and Store Artifacts
 
 on:
   push:
     branches: [ main ]
-  workflow_dispatch: # Allows manual triggering
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  test-windows:
-    runs-on: [self-hosted, windows-runner]
+  test:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Frontend Test Environment
+        uses: ./.github/actions/setup-test-env
         with:
-          node-version: '20'
-      - name: Install Frontend Dependencies
-        run: npm install
-        working-directory: ./Frontend
+          working-directory: ./Frontend
       - name: Run Frontend Tests
         run: npm test
         working-directory: ./Frontend
-      - name: Install Backend Dependencies
-        run: npm install
-        working-directory: ./Backend
+      - name: Setup Backend Test Environment
+        uses: ./.github/actions/setup-test-env
+        with:
+          working-directory: ./Backend
       - name: Run Backend Tests
         run: npm test
         working-directory: ./Backend
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
-  test-linux:
-    runs-on: [self-hosted, linux-runner]
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Archive Test Reports
+        uses: actions/upload-artifact@v4
         with:
-          node-version: '20'
-      - name: Install Frontend Dependencies
-        run: npm install
-        working-directory: ./Frontend
-      - name: Run Frontend Tests
-        run: npm test
-        working-directory: ./Frontend
-      - name: Install Backend Dependencies
-        run: npm install
-        working-directory: ./Backend
-      - name: Run Backend Tests
-        run: npm test
-        working-directory: ./Backend
-        env:
-          MONGO_URI: ${{ secrets.MONGO_URI }}
+          name: test-reports
+          path: |
+            Frontend/jest-results.json
+            Backend/test-results.xml
