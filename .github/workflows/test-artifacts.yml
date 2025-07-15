@@ -1,0 +1,37 @@
+name: Run Tests and Store Artifacts
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Frontend Test Environment
+        uses: ./.github/actions/setup-test-env
+        with:
+          working-directory: ./Frontend
+      - name: Run Frontend Tests
+        run: npm test
+        working-directory: ./Frontend
+      - name: Setup Backend Test Environment
+        uses: ./.github/actions/setup-test-env
+        with:
+          working-directory: ./Backend
+      - name: Run Backend Tests
+        run: npm test
+        working-directory: ./Backend
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+      - name: Archive Test Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: |
+            Frontend/jest-results.json
+            Backend/test-results.xml
