@@ -15,6 +15,9 @@ describe('Time Functions', () => {
     updateTime();
     const datetime = document.getElementById('datetime').innerHTML;
     expect(datetime).toBeDefined(); // Check if defined first
+    print (datetime);
     expect(datetime).toMatch(/\d{1,2}:\d{2}:\d{2} (AM|PM)/);
+    
+
   });
 });
